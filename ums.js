@@ -35,19 +35,48 @@ let selectedDate = '';        // Currently selected date in YYYY-MM-DD format
 
 // Initialize page on load
 document.addEventListener('DOMContentLoaded', function() {
-    // Set today's date as default
+    // Set today's date as default and display it
     const today = new Date().toISOString().split('T')[0];
-    document.getElementById('attendanceDate').value = today;
     selectedDate = today;
+    displayCurrentDate();
     
     // Load members from Google Sheets for today's date
     loadMembers();
     
     // Set up event listeners
-    document.getElementById('attendanceDate').addEventListener('change', handleDateChange);
     document.getElementById('searchBox').addEventListener('input', handleSearch);
     document.getElementById('submitBtn').addEventListener('click', handleSubmit);
+    
+    // Toggle floating summary
+    document.getElementById('toggleBtn').addEventListener('click', toggleSummary);
 });
+
+/**
+ * Display the current date in a readable format
+ */
+function displayCurrentDate() {
+    const dateElement = document.getElementById('currentDate');
+    const date = new Date(selectedDate);
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    dateElement.textContent = date.toLocaleDateString('en-US', options);
+}
+
+/**
+ * Toggle the floating summary box
+ */
+function toggleSummary() {
+    const summaryContent = document.getElementById('summaryContent');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const icon = toggleBtn.querySelector('i');
+    
+    summaryContent.classList.toggle('collapsed');
+    
+    if (summaryContent.classList.contains('collapsed')) {
+        icon.className = 'fas fa-chevron-down';
+    } else {
+        icon.className = 'fas fa-chevron-up';
+    }
+}
 
 /**
  * Load members from Google Sheets via Apps Script backend
@@ -260,11 +289,8 @@ function handleAttendanceToggle(memberId, isChecked) {
     updateTempStats();
 }
 
-// Handle date change
-function handleDateChange(e) {
-    selectedDate = e.target.value;
-    loadMembers(); // Reload data for new date
-}
+// Note: Date change functionality removed as date is now auto-fetched and displayed
+// The page always shows current date attendance
 
 // Handle search
 function handleSearch(e) {

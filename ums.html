@@ -5,24 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UMS Attendance - Nutrition Club</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="ums-page">
     <div class="ums-container">
-        <!-- Header Section -->
-        <div class="ums-header">
-            <div class="header-item">
-                <input type="date" id="attendanceDate" class="date-picker">
-            </div>
-            <div class="header-item">
-                <h1>UMS Attendance</h1>
-            </div>
-            <div class="header-item">
-                <input type="text" id="searchBox" placeholder="Search by name..." class="search-box">
-            </div>
+        <!-- Page Title - Top Center -->
+        <h1 class="ums-page-title">UMS Attendance</h1>
+        
+        <!-- Date Display - Top Left -->
+        <div class="date-display">
+            <i class="fas fa-calendar-day"></i>
+            <span id="currentDate"></span>
+        </div>
+
+        <!-- Search Box - Above Table -->
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchBox" placeholder="Search by name..." class="search-box">
         </div>
 
         <!-- Loading Indicator -->
-        <div id="loadingIndicator" class="loading-indicator">Loading members...</div>
+        <div id="loadingIndicator" class="loading-indicator">
+            <i class="fas fa-spinner fa-spin"></i> Loading members...
+        </div>
 
         <!-- Members Table -->
         <div class="table-container">
@@ -46,22 +51,47 @@
             </table>
         </div>
 
-        <!-- Floating Bottom Bar -->
-        <div class="bottom-bar">
-            <div class="stat-item">
-                <span class="stat-label">Total Members:</span>
-                <span id="totalMembers" class="stat-value">0</span>
+        <!-- Floating Attendance Summary Box -->
+        <div class="floating-summary" id="floatingSummary">
+            <div class="summary-header">
+                <h3>Summary</h3>
+                <button class="toggle-btn" id="toggleBtn">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
             </div>
-            <div class="stat-item">
-                <span class="stat-label">Present Today:</span>
-                <span id="presentToday" class="stat-value">0</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Total Amount Received:</span>
-                <span id="totalAmount" class="stat-value">₹0</span>
-            </div>
-            <div class="stat-item">
-                <button id="submitBtn" class="btn-submit">Submit</button>
+            <div class="summary-content" id="summaryContent">
+                <div class="summary-stats">
+                    <div class="stat-box">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Members</span>
+                            <span id="totalMembers" class="stat-value">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon present">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Present Today</span>
+                            <span id="presentToday" class="stat-value">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon amount">
+                            <i class="fas fa-rupee-sign"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Amount Received</span>
+                            <span id="totalAmount" class="stat-value">₹0</span>
+                        </div>
+                    </div>
+                </div>
+                <button id="submitBtn" class="btn-submit">
+                    <i class="fas fa-check-circle"></i> Submit Attendance
+                </button>
             </div>
         </div>
     </div>
