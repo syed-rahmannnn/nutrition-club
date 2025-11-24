@@ -90,15 +90,23 @@ async function loadMembers() {
         // APPS_SCRIPT_URL comes from config.js
         const url = `${APPS_SCRIPT_URL}?action=getMembers&date=${selectedDate}`;
         
-        // Fetch data from Google Apps Script
-        const response = await fetch(url);
+        // Fetch data from Google Apps Script with proper configuration
+        const response = await fetch(url, {
+            method: 'GET',
+            redirect: 'follow'
+        });
         
         if (!response.ok) {
-            throw new Error('Failed to fetch members');
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         // Parse JSON response
         const data = await response.json();
+        
+        // Check if response indicates success
+        if (!data.success) {
+            throw new Error(data.error || 'Unknown error from backend');
+        }
         
         // Populate allMembers with data from Google Sheets
         // This is the ONLY source of data - nothing is hardcoded!
@@ -119,7 +127,7 @@ async function loadMembers() {
     } catch (error) {
         console.error('Error loading members:', error);
         showLoading(false);
-        alert('Error loading members. Please check your backend configuration.\n\nMake sure:\n1. APPS_SCRIPT_URL is set in config.js\n2. Apps Script is deployed as web app\n3. Your Google Sheets has data in the Members sheet');
+        alert('Error loading members. Please check your backend configuration.\n\nMake sure:\n1. APPS_SCRIPT_URL is set in config.js\n2. Apps Script is deployed as web app\n3. Your Google Sheets has data in the Members sheet\n\nError: ' + error.message);
     }
 }
 
@@ -296,13 +304,16 @@ async function handleSubmit() {
             memberIds: Array.from(tempAttendance)
         };
         
-        // Send to backend
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(attendanceData)
+        // Send to backend using GET method with query parameters to avoid CORS preflight
+        const params = new URLSearchParams({
+            action: 'submitAttendance',
+            date: selectedDate,
+            memberIds: JSON.stringify(Array.from(tempAttendance))
+        });
+        
+        const response = await fetch(`${APPS_SCRIPT_URL}?${params.toString()}`, {
+            method: 'GET',
+            redirect: 'follow'
         });
         
         if (!response.ok) {

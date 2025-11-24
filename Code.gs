@@ -121,7 +121,7 @@ const ATTENDANCE_SHEET_NAME = 'Attendance';
 
 /**
  * Handle GET requests
- * Used to fetch member data
+ * Used to fetch member data and submit attendance
  */
 function doGet(e) {
   try {
@@ -134,6 +134,28 @@ function doGet(e) {
       return createJsonResponse({
         success: true,
         members: members
+      });
+    }
+    
+    if (action === 'submitAttendance') {
+      const date = e.parameter.date;
+      const memberIdsJson = e.parameter.memberIds;
+      
+      if (!date || !memberIdsJson) {
+        throw new Error('Invalid data: date and memberIds required');
+      }
+      
+      const memberIds = JSON.parse(memberIdsJson);
+      
+      if (!memberIds || memberIds.length === 0) {
+        throw new Error('No members selected');
+      }
+      
+      submitAttendance(date, memberIds);
+      
+      return createJsonResponse({
+        success: true,
+        message: 'Attendance submitted successfully'
       });
     }
     
