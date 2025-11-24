@@ -165,6 +165,7 @@ function doGet(e) {
     });
     
   } catch (error) {
+    Logger.log('Error in doGet: ' + error.toString());
     return createJsonResponse({
       success: false,
       error: error.toString()
@@ -398,12 +399,14 @@ function getTodayDate() {
 }
 
 /**
- * Create JSON response
+ * Create JSON response with CORS headers
  */
 function createJsonResponse(data) {
-  return ContentService
+  const output = ContentService
     .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
+  
+  return output;
 }
 
 /**
