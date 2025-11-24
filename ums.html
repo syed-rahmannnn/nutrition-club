@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UMS Attendance - Nutrition Club</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="ums-page">
+    <div class="ums-container">
+        <!-- Header Section -->
+        <div class="ums-header">
+            <div class="header-item">
+                <input type="date" id="attendanceDate" class="date-picker">
+            </div>
+            <div class="header-item">
+                <h1>UMS Attendance</h1>
+            </div>
+            <div class="header-item">
+                <input type="text" id="searchBox" placeholder="Search by name..." class="search-box">
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="loading-indicator">Loading members...</div>
+
+        <!-- Members Table -->
+        <div class="table-container">
+            <table id="membersTable" class="members-table">
+                <thead>
+                    <tr>
+                        <th>Profile</th>
+                        <th>Name</th>
+                        <th>Phone Number</th>
+                        <th>UMS / Trial</th>
+                        <th>Count</th>
+                        <th>Balance</th>
+                        <th>Paid</th>
+                        <th>Attendance</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody id="membersTableBody">
+                    <!-- Table rows will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Floating Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="stat-item">
+                <span class="stat-label">Total Members:</span>
+                <span id="totalMembers" class="stat-value">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Present Today:</span>
+                <span id="presentToday" class="stat-value">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Total Amount Received:</span>
+                <span id="totalAmount" class="stat-value">₹0</span>
+            </div>
+            <div class="stat-item">
+                <button id="submitBtn" class="btn-submit">Submit</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="config.js"></script>
+    <script src="ums.js"></script>
+</body>
+</html>
