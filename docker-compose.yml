@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: membershipdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build: ./backend
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/membershipdb
+      - DJANGO_SECRET_KEY=replace-me-with-secure-key-in-production
+      - DEBUG=1
+
+volumes:
+  pgdata:

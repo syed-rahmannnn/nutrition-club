@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Health & Lifestyle Analysis Report</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            margin: 0;
+            padding: 10px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .header h1 {
+            font-size: 18px;
+            margin: 5px 0;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .header h2 {
+            font-size: 14px;
+            margin: 5px 0;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .section {
+            border: 2px solid #000;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            background-color: #e0e0e0;
+            padding: 5px;
+            margin: -10px -10px 10px -10px;
+            border-bottom: 2px solid #000;
+        }
+        
+        .info-grid {
+            display: table;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .info-row {
+            display: table-row;
+        }
+        
+        .info-label {
+            display: table-cell;
+            font-weight: bold;
+            padding: 3px 5px;
+            width: 30%;
+        }
+        
+        .info-value {
+            display: table-cell;
+            padding: 3px 5px;
+            border-bottom: 1px solid #ccc;
+        }
+        
+        .questions {
+            margin: 10px 0;
+        }
+        
+        .question-row {
+            margin: 5px 0;
+            padding: 3px 0;
+        }
+        
+        .question-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 60%;
+        }
+        
+        .question-answer {
+            display: inline-block;
+        }
+        
+        .health-history {
+            margin-top: 10px;
+        }
+        
+        .health-history-title {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .health-grid {
+            display: table;
+            width: 100%;
+        }
+        
+        .health-row {
+            display: table-row;
+        }
+        
+        .health-item {
+            display: table-cell;
+            padding: 2px 5px;
+            width: 25%;
+        }
+        
+        .health-item-label {
+            font-weight: bold;
+            display: inline;
+        }
+        
+        .health-item-value {
+            display: inline;
+            margin-left: 5px;
+        }
+        
+        /* Body Components Table */
+        table.body-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        table.body-table th,
+        table.body-table td {
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: center;
+            font-size: 10px;
+        }
+        
+        table.body-table th {
+            background-color: #d0d0d0;
+            font-weight: bold;
+        }
+        
+        .yellow-highlight {
+            background-color: #fff9a6;
+            font-weight: bold;
+        }
+        
+        .pink-highlight {
+            background-color: #ffc0cb;
+            font-weight: bold;
+        }
+        
+        .category-header {
+            font-weight: bold;
+            background-color: #e8e8e8;
+        }
+        
+        .bottom-info {
+            margin-top: 10px;
+            font-size: 10px;
+        }
+        
+        .bottom-row {
+            display: table;
+            width: 100%;
+            margin-top: 5px;
+        }
+        
+        .bottom-cell {
+            display: table-cell;
+            padding: 3px 5px;
+            width: 33%;
+        }
+        
+        .bottom-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Health and Lifestyle Survey Section -->
+    <div class="section">
+        <div class="section-title">HEALTH AND LIFESTYLE SURVEY</div>
+        
+        <div class="info-grid">
+            <div class="info-row">
+                <div class="info-label">Guest Name:</div>
+                <div class="info-value">{{ registration.guest_name }}</div>
+                <div class="info-label">Mobile No:</div>
+                <div class="info-value">{{ registration.mobile_number }}</div>
+            </div>
+        </div>
+        
+        <div class="info-grid">
+            <div class="info-row">
+                <div class="info-label">Occupation:</div>
+                <div class="info-value">{{ registration.occupation }}</div>
+                <div class="info-label">Date:</div>
+                <div class="info-value">{{ registration.created_at|date:"d/m/Y" }}</div>
+            </div>
+        </div>
+        
+        <div class="info-grid">
+            <div class="info-row">
+                <div class="info-label">Age:</div>
+                <div class="info-value">{{ registration.age }}</div>
+                <div class="info-label">Gender:</div>
+                <div class="info-value">{{ registration.gender }}</div>
+            </div>
+        </div>
+        
+        <div class="info-grid" style="margin-bottom: 15px;">
+            <div class="info-row">
+                <div class="info-label">Location:</div>
+                <div class="info-value">{{ registration.location|default:"N/A" }}</div>
+            </div>
+        </div>
+        
+        <div class="questions">
+            <div class="question-row">
+                <span class="question-label">1. Do you exercise:</span>
+                <span class="question-answer">{{ registration.do_you_exercise }}</span>
+            </div>
+            <div class="question-row">
+                <span class="question-label">2. How many hours do you sleep?</span>
+                <span class="question-answer">{{ registration.hours_sleep }}</span>
+            </div>
+            <div class="question-row">
+                <span class="question-label">3. How many liters of water do you consume on a daily basis?</span>
+                <span class="question-answer">{{ registration.liters_water }}</span>
+            </div>
+            <div class="question-row">
+                <span class="question-label">4. Do you experience any loss of energy during the day?</span>
+                <span class="question-answer">{{ registration.loss_of_energy }}</span>
+            </div>
+            <div class="question-row">
+                <span class="question-label">5. Are you Veg ( ) Non. Veg ( )</span>
+                <span class="question-answer">{{ registration.veg_nonveg|default:"Not specified" }}</span>
+            </div>
+        </div>
+        
+        <div class="health-history">
+            <div class="health-history-title">PLEASE FILL YOUR PERSONAL HEALTH HISTORY</div>
+            <div class="health-grid">
+                {% with health=registration.personal_health_history %}
+                <div class="health-row">
+                    <div class="health-item">
+                        <span class="health-item-label">1. Diabetes:</span>
+                        <span class="health-item-value">{{ health.diabetes|default:"N/A" }}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">6. Ulcer:</span>
+                        <span class="health-item-value">{{ health.ulcer|default:"N/A" }}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">11. Knee/Joint/Back pain:</span>
+                        <span class="health-item-value">{% if health.knee_joint_back %}{{ health.knee_joint_back|join:", " }}{% else %}N/A{% endif %}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">16. Over Weight:</span>
+                        <span class="health-item-value">{{ health.overweight|default:"N/A" }}</span>
+                    </div>
+                </div>
+                <div class="health-row">
+                    <div class="health-item">
+                        <span class="health-item-label">2. BP:</span>
+                        <span class="health-item-value">{{ health.bp|default:"N/A" }}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">7. Digestive problem:</span>
+                        <span class="health-item-value">{{ health.digestive_problem|default:"N/A" }}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">12. Heart/Kidney/Liver:</span>
+                        <span class="health-item-value">{% if health.heart_kidney_liver %}{{ health.heart_kidney_liver|join:", " }}{% else %}N/A{% endif %}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">17. Under Weight:</span>
+                        <span class="health-item-value">{{ health.underweight|default:"N/A" }}</span>
+                    </div>
+                </div>
+                <div class="health-row">
+                    <div class="health-item">
+                        <span class="health-item-label">3. Thyroid:</span>
+                        <span class="health-item-value">{{ health.thyroid|default:"N/A" }}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">8. Constipation (Motion):</span>
+                        <span class="health-item-value">{{ health.constipation|default:"N/A" }}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">13. Skin/Hair problem:</span>
+                        <span class="health-item-value">{{ health.skin_hair_problem|default:"N/A" }}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">18. Low Energy:</span>
+                        <span class="health-item-value">{{ health.low_energy|default:"N/A" }}</span>
+                    </div>
+                </div>
+                <div class="health-row">
+                    <div class="health-item">
+                        <span class="health-item-label">4. Cholesterol:</span>
+                        <span class="health-item-value">{{ health.cholesterol|default:"N/A" }}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">9. Headache/Migraine:</span>
+                        <span class="health-item-value">{{ health.headache_migraine|default:"N/A" }}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">14. Vitamin/Mineral Def.:</span>
+                        <span class="health-item-value">{{ health.vitamin_mineral_def|default:"N/A" }}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">19. Snoring/Sleeping:</span>
+                        <span class="health-item-value">{{ health.snoring_sleeping|default:"N/A" }}</span>
+                    </div>
+                </div>
+                <div class="health-row">
+                    <div class="health-item">
+                        <span class="health-item-label">5. Gas/Acidity:</span>
+                        <span class="health-item-value">{{ health.gas_acidity|default:"N/A" }}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">10. Asthma/Breathing:</span>
+                        <span class="health-item-value">{{ health.asthma_breathing|default:"N/A" }}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">15. Gynec/Infections:</span>
+                        <span class="health-item-value">{{ health.gynec_infections|default:"N/A" }}</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-label">20. Depression:</span>
+                        <span class="health-item-value">{{ health.depression|default:"N/A" }}</span>
+                    </div>
+                </div>
+                {% endwith %}
+            </div>
+        </div>
+        
+        <div class="questions" style="margin-top: 15px;">
+            <div class="question-row">
+                <span class="question-label">6. What kind of transformation you are looking for?</span>
+                <span class="question-answer">{{ registration.transformation_targets }}</span>
+            </div>
+            <div class="question-row">
+                <span class="question-label">7. Have you tried any diet programs in the past?</span>
+                <span class="question-answer">{% if registration.tried_diet_programs %}Yes{% else %}No{% endif %}</span>
+            </div>
+        </div>
+        
+        <div class="bottom-row">
+            <div class="bottom-cell">
+                <span class="bottom-label">Surveyed by:</span> {{ registration.surveyed_by }}
+            </div>
+            <div class="bottom-cell">
+                <span class="bottom-label">Available Time:</span> {{ registration.available_time }}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Body Components Evaluation Section -->
+    <div class="section">
+        <div class="section-title">BODY COMPONENTS EVALUATION</div>
+        
+        <div class="info-grid">
+            <div class="info-row">
+                <div class="info-label">Height:</div>
+                <div class="info-value">{{ body_eval.height_cm }} cm</div>
+                <div class="info-label">Male / Female Age:</div>
+                <div class="info-value">{{ registration.gender }} / {{ registration.age }}</div>
+            </div>
+        </div>
+        
+        <div class="info-grid" style="margin-bottom: 15px;">
+            <div class="info-row">
+                <div class="info-label">Invited by:</div>
+                <div class="info-value">{{ registration.invited_by }}</div>
+                <div class="info-label">Date:</div>
+                <div class="info-value">{{ body_eval.date|date:"d/m/Y" }}</div>
+            </div>
+        </div>
+        
+        <table class="body-table">
+            <thead>
+                <tr>
+                    <th rowspan="2">Date</th>
+                    <th rowspan="2">Weight<br/>kg</th>
+                    <th colspan="2">Visceral Fat</th>
+                    <th colspan="2">Trunk<br/>Subcutaneous</th>
+                    <th colspan="2">Body Fat</th>
+                    <th rowspan="2">Body<br/>Age</th>
+                    <th rowspan="2">BMI</th>
+                    <th colspan="2">Skeletal Muscle</th>
+                </tr>
+                <tr>
+                    <th>0</th>
+                    <th>&lt;15%</th>
+                    <th>0</th>
+                    <th>20-30</th>
+                    <th>Men</th>
+                    <th>Women</th>
+                    <th>Men</th>
+                    <th>Women</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Risk categories row -->
+                <tr class="category-header">
+                    <td>Normal</td>
+                    <td class="yellow-highlight">
+                        {{ analysis.min_weight|floatformat:0 }} – {{ analysis.max_weight|floatformat:0 }}
+                    </td>
+                    <td colspan="2">9.5-12</td>
+                    <td colspan="2">
+                        {% if registration.gender == "Male" %}
+                        15-23.25
+                        {% elif registration.gender == "Female" %}
+                        30-35.25
+                        {% else %}
+                        15-30
+                        {% endif %}
+                    </td>
+                    <td>20-25</td>
+                    <td>30-35</td>
+                    <td>Real Age</td>
+                    <td>18.5-23</td>
+                    <td>32.9-35.7</td>
+                    <td>25.9-27.9</td>
+                </tr>
+                
+                <!-- Actual values row -->
+                <tr>
+                    <td>{{ body_eval.date|date:"d/m/y" }}</td>
+                    <td><strong>{{ body_eval.weight_kg }}</strong></td>
+                    <td colspan="2"><strong>{{ body_eval.visceral_fat }}</strong></td>
+                    <td colspan="2"><strong>{{ body_eval.trunk_subcutaneous_fat|default:"—" }}</strong></td>
+                    <td><strong>{% if registration.gender == "Male" %}{{ body_eval.body_fat_men|default:"—" }}{% else %}—{% endif %}</strong></td>
+                    <td><strong>{% if registration.gender == "Female" %}{{ body_eval.body_fat_women|default:"—" }}{% else %}—{% endif %}</strong></td>
+                    <td><strong>{{ body_eval.body_age|default:"—" }}</strong></td>
+                    <td><strong>{{ body_eval.bmi|default:"—" }}</strong></td>
+                    <td><strong>{% if registration.gender == "Male" %}{{ body_eval.skeletal_muscle_men|default:"—" }}{% else %}—{% endif %}</strong></td>
+                    <td><strong>{% if registration.gender == "Female" %}{{ body_eval.skeletal_muscle_women|default:"—" }}{% else %}—{% endif %}</strong></td>
+                </tr>
+                
+                <!-- Differences row (pink highlighted) -->
+                <tr class="pink-highlight">
+                    <td></td>
+                    <td>{{ analysis.excess_weight|floatformat:1 }}</td>
+                    <td colspan="2">{{ analysis.visceral_diff|floatformat:1 }}</td>
+                    <td colspan="2">{{ analysis.trunk_diff|floatformat:1 }}</td>
+                    <td colspan="2">{{ analysis.body_fat_diff|floatformat:1 }}</td>
+                    <td>{{ analysis.body_age_diff|floatformat:1 }}</td>
+                    <td>{{ analysis.bmi_diff|floatformat:1 }}</td>
+                    <td colspan="2">{{ analysis.skeletal_diff|floatformat:1 }}</td>
+                </tr>
+                
+
+            </tbody>
+        </table>
+        
+        <div class="bottom-info">
+            <div style="margin-top: 10px; padding: 5px; border: 1px solid #000; background-color: #fff9e6;">
+                <strong>BMI (Body Mass Index):</strong> {{ body_eval.bmi|default:"N/A" }} | 
+                <strong>BMR (RM):</strong> {{ body_eval.bmr_rm|default:"N/A" }}
+            </div>
+            
+            <div style="margin-top: 8px; padding: 5px; border: 1px solid #000;">
+                <div style="display: inline-block; width: 48%;">
+                    <strong>Fat:</strong> <span style="font-size: 14px; font-weight: bold;">{{ body_eval.fat|floatformat:1 }}</span>
+                </div>
+                <div style="display: inline-block; width: 48%;">
+                    <strong>Fluids:</strong> <span style="font-size: 14px; font-weight: bold;">{{ body_eval.fluids|floatformat:1 }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

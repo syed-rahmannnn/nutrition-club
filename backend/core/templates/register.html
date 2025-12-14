@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Registration</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="max-w-4xl mx-auto p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">Health & Lifestyle Survey - New Registration</h1>
+      <a href="/" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">Back</a>
+    </div>
+    
+    <form id="registrationForm" class="space-y-6 bg-white p-6 rounded shadow" method="post">
+      <!-- Basic fields -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium">Guest Name <span class="text-red-600">*</span></label>
+          <input name="guest_name" required class="mt-1 block w-full border rounded p-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Mobile Number <span class="text-red-600">*</span></label>
+          <input name="mobile_number" required class="mt-1 block w-full border rounded p-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Invited by <span class="text-red-600">*</span></label>
+          <input name="invited_by" required class="mt-1 block w-full border rounded p-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Gender <span class="text-red-600">*</span></label>
+          <select id="gender" name="gender" required class="mt-1 block w-full border rounded p-2">
+            <option value="">--Select--</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Occupation <span class="text-red-600">*</span></label>
+          <input name="occupation" required class="mt-1 block w-full border rounded p-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Age <span class="text-red-600">*</span></label>
+          <input
+            name="age"
+            type="number"
+            min="1"
+            required
+            class="mt-1 block w-full border rounded p-2"
+            placeholder="Enter age"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Location (optional)</label>
+          <input name="location" class="mt-1 block w-full border rounded p-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Membership <span class="text-red-600">*</span></label>
+          <select name="membership" id="membership" required class="mt-1 block w-full border rounded p-2">
+            <option value="">--Select--</option>
+            <option value="TRIAL">Trial</option>
+            <option value="UMS">UMS</option>
+            <option value="COMPLEMENT">Complement</option>
+            <option value="OTHERS">Others</option>
+          </select>
+        </div>
+        <div id="numberOfDaysContainer" style="display: none;">
+          <label class="block text-sm font-medium">Number of Days <span class="text-red-600">*</span></label>
+          <input
+            type="number"
+            name="number_of_days"
+            id="number_of_days"
+            min="1"
+            class="mt-1 block w-full border rounded p-2"
+            placeholder="Enter number of days"
+          />
+        </div>
+      </div>
+
+      <!-- Questionnaire (mandatory fields) -->
+      <div class="bg-gray-50 p-4 rounded">
+        <h2 class="font-semibold mb-3 text-lg">Health & Lifestyle Questions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block">Do you exercise? <span class="text-red-600">*</span></label>
+            <select name="do_you_exercise" required class="w-full border rounded p-2">
+              <option value="">--Select--</option>
+              <option>Yoga</option>
+              <option>Gym</option>
+              <option>Walking</option>
+              <option>None</option>
+            </select>
+          </div>
+          <div>
+            <label>How many hours do you sleep? <span class="text-red-600">*</span></label>
+            <input name="hours_sleep" required class="w-full border rounded p-2" placeholder="e.g. 7-8 or 12pm to 9am" />
+          </div>
+          <div>
+            <label>How many liters of water do you consume daily? <span class="text-red-600">*</span></label>
+            <input name="liters_water" required class="w-full border rounded p-2" placeholder="e.g. 2L" />
+          </div>
+          <div>
+            <label>Do you experience loss of energy? <span class="text-red-600">*</span></label>
+            <select name="loss_of_energy" required class="w-full border rounded p-2">
+              <option value="">--Select--</option>
+              <option>Yes</option>
+              <option>No</option>
+              <option>Occasionally</option>
+            </select>
+          </div>
+          <div>
+            <label>Veg / Non-Veg (optional)</label>
+            <select name="veg_nonveg" class="w-full border rounded p-2">
+              <option value="">--Select--</option>
+              <option>Veg</option>
+              <option>Non-Veg</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Personal Health History - Structured Questions -->
+        <div class="mt-4 bg-white p-4 rounded border">
+          <h3 class="font-semibold mb-3 text-md">Personal Health History</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Diabetes:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="diabetes" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="diabetes" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">BP:</label>
+              <div class="flex gap-2">
+                <label><input type="radio" name="bp" value="high" class="mr-1"> High</label>
+                <label><input type="radio" name="bp" value="low" class="mr-1"> Low</label>
+                <label><input type="radio" name="bp" value="none" class="mr-1" checked> None</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Thyroid:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="thyroid" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="thyroid" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Cholesterol:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="cholesterol" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="cholesterol" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Gas / Acidity:</label>
+              <div class="flex gap-2">
+                <label><input type="radio" name="gas_acidity" value="none" class="mr-1" checked> None</label>
+                <label><input type="radio" name="gas_acidity" value="gas" class="mr-1"> Gas</label>
+                <label><input type="radio" name="gas_acidity" value="acidity" class="mr-1"> Acidity</label>
+                <label><input type="radio" name="gas_acidity" value="both" class="mr-1"> Both</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Ulcer:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="ulcer" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="ulcer" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Digestive problem:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="digestive_problem" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="digestive_problem" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Constipation (Motion):</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="constipation" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="constipation" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Headache / Migraine:</label>
+              <div class="flex gap-2">
+                <label><input type="radio" name="headache_migraine" value="none" class="mr-1" checked> None</label>
+                <label><input type="radio" name="headache_migraine" value="headache" class="mr-1"> Headache</label>
+                <label><input type="radio" name="headache_migraine" value="migraine" class="mr-1"> Migraine</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Asthma / Breathing:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="asthma_breathing" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="asthma_breathing" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Knee / Joint / Back pain:</label>
+              <div class="flex gap-2">
+                <label><input type="checkbox" name="knee_joint_back" value="knee" class="mr-1"> Knee</label>
+                <label><input type="checkbox" name="knee_joint_back" value="joint" class="mr-1"> Joint</label>
+                <label><input type="checkbox" name="knee_joint_back" value="back" class="mr-1"> Back</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Heart / Kidney / Liver:</label>
+              <div class="flex gap-2">
+                <label><input type="checkbox" name="heart_kidney_liver" value="heart" class="mr-1"> Heart</label>
+                <label><input type="checkbox" name="heart_kidney_liver" value="kidney" class="mr-1"> Kidney</label>
+                <label><input type="checkbox" name="heart_kidney_liver" value="liver" class="mr-1"> Liver</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Skin / Hair problem:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="skin_hair_problem" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="skin_hair_problem" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Vitamin / Mineral deficiency:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="vitamin_mineral_def" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="vitamin_mineral_def" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Gynec / Infections:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="gynec_infections" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="gynec_infections" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Over Weight:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="overweight" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="overweight" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Under Weight:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="underweight" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="underweight" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Low Energy:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="low_energy" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="low_energy" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Snoring / Sleeping:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="snoring_sleeping" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="snoring_sleeping" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2">
+              <label class="text-sm">Depression:</label>
+              <div class="flex gap-3">
+                <label><input type="radio" name="depression" value="yes" class="mr-1"> Yes</label>
+                <label><input type="radio" name="depression" value="no" class="mr-1" checked> No</label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <label>What kind of transformation you are looking for? <span class="text-red-600">*</span></label>
+            <input name="transformation_targets" required class="w-full border rounded p-2" placeholder="e.g. Weight Targets;Fitness;Skin & Hair Health"/>
+          </div>
+          <div>
+            <label>Have you tried any diet programs in the past? <span class="text-red-600">*</span></label>
+            <select name="tried_diet_programs" required class="w-full border rounded p-2">
+              <option value="">--Select--</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <label>Surveyed by <span class="text-red-600">*</span></label>
+            <input name="surveyed_by" required class="w-full border rounded p-2"/>
+          </div>
+          <div>
+            <label>Available Time <span class="text-red-600">*</span></label>
+            <input name="available_time" required class="w-full border rounded p-2"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Body Component Evaluation (all fields mandatory) -->
+      <div class="mt-4 bg-white p-4 rounded shadow">
+        <h2 class="font-semibold mb-3 text-lg">Body Components Evaluation</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label>Height (cm) <span class="text-red-600">*</span></label>
+            <input name="height_cm" required type="number" step="0.01" class="w-full border rounded p-2"/>
+          </div>
+          <div>
+            <label>Weight (kg) <span class="text-red-600">*</span></label>
+            <input name="weight_kg" required type="number" step="0.01" class="w-full border rounded p-2"/>
+          </div>
+          <div>
+            <label>Visceral Fat <span class="text-red-600">*</span></label>
+            <input name="visceral_fat" required type="number" step="0.01" class="w-full border rounded p-2"/>
+          </div>
+
+          <div>
+            <label>Trunk Subcutaneous Fat</label>
+            <input name="trunk_subcutaneous_fat" type="number" step="0.01" class="w-full border rounded p-2"/>
+          </div>
+          <div>
+            <label>Body Fat (Men)</label>
+            <input id="body_fat_men" name="body_fat_men" type="number" step="0.01" class="w-full border rounded p-2"/>
+          </div>
+          <div>
+            <label>Body Fat (Women)</label>
+            <input id="body_fat_women" name="body_fat_women" type="number" step="0.01" class="w-full border rounded p-2"/>
+          </div>
+
+          <div>
+            <label>Body Age</label>
+            <input name="body_age" type="number" step="0.01" class="w-full border rounded p-2"/>
+          </div>
+          <div>
+            <label>BMI</label>
+            <input name="bmi" type="number" step="0.01" class="w-full border rounded p-2"/>
+          </div>
+          <div>
+            <label>BMR (RM)</label>
+            <input name="bmr_rm" type="number" step="0.01" class="w-full border rounded p-2"/>
+          </div>
+
+          <div>
+            <label>Skeleton Muscle (Men)</label>
+            <input id="skeletal_muscle_men" name="skeletal_muscle_men" type="number" step="0.01" class="w-full border rounded p-2"/>
+          </div>
+          <div>
+            <label>Skeleton Muscle (Women)</label>
+            <input id="skeletal_muscle_women" name="skeletal_muscle_women" type="number" step="0.01" class="w-full border rounded p-2"/>
+          </div>
+          
+          <div class="md:col-span-3">
+            <label>Notes (optional)</label>
+            <textarea name="notes" class="w-full border rounded p-2" rows="2"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Section -->
+      <div class="mt-6 bg-gray-50 p-4 rounded border">
+        <h2 class="font-semibold mb-3">Payment Details</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium">Total Amount</label>
+            <input
+              type="number"
+              step="0.01"
+              name="plan_total_amount"
+              id="plan_total_amount"
+              class="mt-1 block w-full border rounded p-2 bg-gray-100"
+              readonly
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Amount Paid at Registration</label>
+            <input
+              type="number"
+              step="0.01"
+              name="initial_amount_paid"
+              id="initial_amount_paid"
+              class="mt-1 block w-full border rounded p-2"
+              value="0"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Submit Registration</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Gender-dependent field management
+    function updateGenderFields() {
+      const genderSelect = document.getElementById('gender');
+      const gender = genderSelect.value;
+      
+      const bodyFatMen = document.getElementById('body_fat_men');
+      const bodyFatWomen = document.getElementById('body_fat_women');
+      const skeletalMuscleMen = document.getElementById('skeletal_muscle_men');
+      const skeletalMuscleWomen = document.getElementById('skeletal_muscle_women');
+      
+      // Reset all fields first
+      [bodyFatMen, bodyFatWomen, skeletalMuscleMen, skeletalMuscleWomen].forEach(field => {
+        field.disabled = false;
+        field.classList.remove('bg-gray-100');
+      });
+      
+      if (gender === 'Male') {
+        // Disable women fields
+        bodyFatWomen.disabled = true;
+        bodyFatWomen.classList.add('bg-gray-100');
+        bodyFatWomen.value = '';
+        skeletalMuscleWomen.disabled = true;
+        skeletalMuscleWomen.classList.add('bg-gray-100');
+        skeletalMuscleWomen.value = '';
+      } else if (gender === 'Female') {
+        // Disable men fields
+        bodyFatMen.disabled = true;
+        bodyFatMen.classList.add('bg-gray-100');
+        bodyFatMen.value = '';
+        skeletalMuscleMen.disabled = true;
+        skeletalMuscleMen.classList.add('bg-gray-100');
+        skeletalMuscleMen.value = '';
+      }
+      // For 'Other' gender, all fields remain enabled (no restrictions)
+    }
+    
+    // Attach event listener to gender dropdown
+    document.getElementById('gender').addEventListener('change', updateGenderFields);
+    
+    // Call on page load with default value
+    document.addEventListener('DOMContentLoaded', updateGenderFields);
+
+    // Membership amount auto-fill logic
+    const membershipSelect = document.getElementById('membership');
+    const totalAmountInput = document.getElementById('plan_total_amount');
+    const initialPaidInput = document.getElementById('initial_amount_paid');
+    const numberOfDaysContainer = document.getElementById('numberOfDaysContainer');
+    const numberOfDaysInput = document.getElementById('number_of_days');
+
+    function updateMembershipAmounts() {
+      const val = membershipSelect.value;
+      
+      if (val === 'TRIAL') {
+        // TRIAL: predefined amount, payment fields read-only
+        totalAmountInput.value = 700;
+        totalAmountInput.readOnly = true;
+        totalAmountInput.classList.add('bg-gray-100');
+        initialPaidInput.disabled = false;
+        if (!initialPaidInput.value) initialPaidInput.value = 0;
+        
+        // Hide Number of Days field
+        numberOfDaysContainer.style.display = 'none';
+        numberOfDaysInput.disabled = true;
+        numberOfDaysInput.removeAttribute('required');
+        numberOfDaysInput.value = '';
+        
+      } else if (val === 'UMS') {
+        // UMS: predefined amount, payment fields read-only
+        totalAmountInput.value = 5400;
+        totalAmountInput.readOnly = true;
+        totalAmountInput.classList.add('bg-gray-100');
+        initialPaidInput.disabled = false;
+        if (!initialPaidInput.value) initialPaidInput.value = 0;
+        
+        // Hide Number of Days field
+        numberOfDaysContainer.style.display = 'none';
+        numberOfDaysInput.disabled = true;
+        numberOfDaysInput.removeAttribute('required');
+        numberOfDaysInput.value = '';
+        
+      } else if (val === 'COMPLEMENT') {
+        // COMPLEMENT: zero amount, initial paid disabled
+        totalAmountInput.value = 0;
+        totalAmountInput.readOnly = true;
+        totalAmountInput.classList.add('bg-gray-100');
+        initialPaidInput.value = 0;
+        initialPaidInput.disabled = true;
+        
+        // Hide Number of Days field
+        numberOfDaysContainer.style.display = 'none';
+        numberOfDaysInput.disabled = true;
+        numberOfDaysInput.removeAttribute('required');
+        numberOfDaysInput.value = '';
+        
+      } else if (val === 'OTHERS') {
+        // OTHERS: custom amounts allowed, payment fields editable
+        totalAmountInput.value = '';
+        totalAmountInput.readOnly = false;
+        totalAmountInput.classList.remove('bg-gray-100');
+        initialPaidInput.value = '';
+        initialPaidInput.disabled = false;
+        
+        // Show Number of Days field and make it required
+        numberOfDaysContainer.style.display = 'block';
+        numberOfDaysInput.disabled = false;
+        numberOfDaysInput.setAttribute('required', 'required');
+        
+      } else {
+        // Default: clear values
+        totalAmountInput.value = '';
+        totalAmountInput.readOnly = true;
+        totalAmountInput.classList.add('bg-gray-100');
+        initialPaidInput.disabled = false;
+        
+        // Hide Number of Days field
+        numberOfDaysContainer.style.display = 'none';
+        numberOfDaysInput.disabled = true;
+        numberOfDaysInput.removeAttribute('required');
+        numberOfDaysInput.value = '';
+      }
+    }
+
+    membershipSelect.addEventListener('change', updateMembershipAmounts);
+    window.addEventListener('load', updateMembershipAmounts);
+
+    // Client side: prevent default and post JSON to API endpoint
+    document.getElementById('registrationForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const reg = {};
+      const bodyEval = {};
+      
+      // map registration fields (including new invited_by, gender, and membership)
+      ['guest_name','mobile_number','invited_by','gender','membership','occupation','location','do_you_exercise','hours_sleep','liters_water','loss_of_energy','veg_nonveg','transformation_targets','tried_diet_programs','surveyed_by','available_time'].forEach(k=>{
+        const value = formData.get(k);
+        if (value !== null && value !== '') {
+          reg[k] = value;
+        }
+      });
+      
+      // Add age as integer
+      reg.age = parseInt(formData.get('age'));
+      
+      // Add number_of_days if membership is OTHERS
+      const membershipValue = formData.get('membership');
+      if (membershipValue === 'OTHERS') {
+        const numberOfDays = formData.get('number_of_days');
+        if (numberOfDays) {
+          reg.number_of_days = parseInt(numberOfDays);
+        }
+      }
+      
+      // Payment fields
+      reg.plan_total_amount = parseFloat(totalAmountInput.value || 0);
+      reg.initial_amount_paid = parseFloat(initialPaidInput.value || 0);
+      
+      // Build structured personal_health_history JSON
+      const healthHistory = {
+        diabetes: formData.get('diabetes') || 'no',
+        bp: formData.get('bp') || 'none',
+        thyroid: formData.get('thyroid') || 'no',
+        cholesterol: formData.get('cholesterol') || 'no',
+        gas_acidity: formData.get('gas_acidity') || 'none',
+        ulcer: formData.get('ulcer') || 'no',
+        digestive_problem: formData.get('digestive_problem') || 'no',
+        constipation: formData.get('constipation') || 'no',
+        headache_migraine: formData.get('headache_migraine') || 'none',
+        asthma_breathing: formData.get('asthma_breathing') || 'no',
+        knee_joint_back: formData.getAll('knee_joint_back'),
+        heart_kidney_liver: formData.getAll('heart_kidney_liver'),
+        skin_hair_problem: formData.get('skin_hair_problem') || 'no',
+        vitamin_mineral_def: formData.get('vitamin_mineral_def') || 'no',
+        gynec_infections: formData.get('gynec_infections') || 'no',
+        overweight: formData.get('overweight') || 'no',
+        underweight: formData.get('underweight') || 'no',
+        low_energy: formData.get('low_energy') || 'no',
+        snoring_sleeping: formData.get('snoring_sleeping') || 'no',
+        depression: formData.get('depression') || 'no'
+      };
+      reg.personal_health_history = healthHistory;
+      
+      // map body fields (fat and fluids are now auto-calculated in backend)
+      ['height_cm','weight_kg','visceral_fat','trunk_subcutaneous_fat','body_fat_men','body_fat_women','body_age','bmi','bmr_rm','skeletal_muscle_men','skeletal_muscle_women','notes'].forEach(k=>{
+        const value = formData.get(k);
+        if (value !== null && value !== '') {
+          bodyEval[k] = value;
+        }
+      });
+      
+      // Add today's date for body evaluation
+      bodyEval.date = new Date().toISOString().split('T')[0];
+
+      // Convert tried_diet_programs to boolean
+      if (reg.tried_diet_programs !== undefined) {
+        reg.tried_diet_programs = (reg.tried_diet_programs === 'true');
+      }
+
+      // Do client-side validation for mandatory fields (updated list)
+      const mandatory = ['guest_name','mobile_number','invited_by','gender','membership','occupation','age','do_you_exercise','hours_sleep','liters_water','loss_of_energy','transformation_targets','surveyed_by','available_time'];
+      for(const f of mandatory){
+        if(!reg[f]){
+          alert('Missing required field: ' + f);
+          return;
+        }
+      }
+      
+      // Validate number_of_days if membership is OTHERS
+      if (reg.membership === 'OTHERS') {
+        if (!reg.number_of_days || reg.number_of_days <= 0) {
+          alert('Number of Days is required and must be greater than 0 for Others membership');
+          return;
+        }
+      }
+      
+      // Validate payment amounts for OTHERS membership
+      if (reg.membership === 'OTHERS') {
+        if (!reg.plan_total_amount || reg.plan_total_amount < 0) {
+          alert('Please enter a valid Total Amount for Others membership');
+          return;
+        }
+      }
+      
+      // Body mandatory fields - fat and fluids are now auto-calculated
+      const bodyMandatory = ['height_cm','weight_kg','visceral_fat'];
+      for(const f of bodyMandatory){
+        if(!bodyEval[f]){
+          alert('Missing required body field: ' + f);
+          return;
+        }
+      }
+
+      const payload = { registration: reg, body_evaluation: bodyEval };
+
+      try {
+        const resp = await fetch('/api/registrations/', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: JSON.stringify(payload)
+        });
+        
+        if(resp.ok){
+          const data = await resp.json();
+          // Get registration ID from response
+          const regId = data.registration && data.registration.id;
+          
+          if (!regId) {
+            alert('Registration saved, but no registration ID returned.');
+            return;
+          }
+          
+          // Show success message
+          alert('Registration submitted successfully! Your analysis PDF will download now.');
+          
+          // Trigger PDF download in a new tab to keep current page
+          window.open(`/api/reports/registration/${regId}/analysis/`, '_blank');
+          
+          // Clear the form after successful submission
+          form.reset();
+          
+          // Reset any programmatically set values
+          totalAmountInput.value = '';
+          initialPaidInput.value = '0';
+          initialPaidInput.disabled = false;
+          
+          // Trigger gender field update to reset disabled states
+          updateGenderFields();
+        } else {
+          const err = await resp.json();
+          alert('Error: ' + JSON.stringify(err));
+        }
+      } catch(error) {
+        alert('Network error: ' + error.message);
+      }
+    });
+
+    // Helper function to get CSRF token from cookies
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  </script>
+</body>
+</html>

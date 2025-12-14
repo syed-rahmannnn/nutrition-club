@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Body Checkup</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .checkup-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 11px;
+      table-layout: fixed; /* ensures equal column widths */
+    }
+    .checkup-table th,
+    .checkup-table td {
+      border: 1px solid #cbd5e0;
+      padding: 6px 4px;
+      text-align: center;
+      width: 100px; /* consistent width for all week columns */
+    }
+    .checkup-table th {
+      background-color: #edf2f7;
+      font-weight: 600;
+      color: #42a046; /* headings to green */
+    }
+    .checkup-table .label-col {
+      background-color: #f7fafc;
+      font-weight: 500;
+      text-align: left;
+      padding-left: 12px;
+      width: 160px; /* fixed wider width for label column */
+      color: #42a046; /* row headings green */
+    }
+    .info-box {
+      border: 1px solid #cbd5e0;
+      padding: 8px 12px;
+      background-color: #fff;
+      border-radius: 6px;
+    }
+    .info-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #42a046; /* info labels green */
+      margin-bottom: 2px;
+    }
+    .info-value {
+      font-size: 14px;
+      color: #2d3748; /* keep values black */
+    }
+    input[type="text"].checkup-input {
+      border: 1px solid #cbd5e0;
+      padding: 4px 6px;
+      text-align: center;
+      width: 100%;
+      font-size: 11px;
+    }
+    input[type="text"].checkup-input:focus {
+      outline: none;
+      border-color: #4299e1;
+    }
+    /* Ensure date inputs match text inputs width */
+    input[type="date"].checkup-input {
+      border: 1px solid #cbd5e0;
+      padding: 4px 6px;
+      text-align: center;
+      width: 100%;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="p-6 mx-auto" style="max-width: 1400px;">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold" style="color:#42a046;">Body Checkup</h1>
+      <a href="/" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Back</a>
+    </div>
+    
+    <!-- Search Section -->
+    <div id="searchSection" class="bg-white shadow-md rounded-lg p-6 mb-6">
+      <h2 class="text-lg font-semibold mb-4">Search Member</h2>
+      <div class="flex gap-4">
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Enter Name or Phone Number"
+          class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500"
+        />
+        <button 
+          onclick="searchMember()"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-lg font-medium"
+        >
+          Search
+        </button>
+      </div>
+      
+      <!-- Search Results -->
+      <div id="searchResults" class="mt-4 hidden">
+        <h3 class="font-semibold text-gray-700 mb-2">Select Member:</h3>
+        <div id="resultsContainer"></div>
+      </div>
+    </div>
+
+    <!-- Checkup Display Section -->
+    <div id="checkupSection" class="bg-white shadow-md rounded-lg p-6 hidden">
+      <!-- Member Info -->
+      <div class="grid grid-cols-5 gap-4 mb-6">
+        <div class="info-box">
+          <div class="info-label">Name</div>
+          <div class="info-value" id="memberName">-</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Mobile Number</div>
+          <div class="info-value" id="memberPhone">-</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Date</div>
+          <div class="info-value" id="memberDate">-</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Invited By</div>
+          <div class="info-value" id="memberInvitedBy">-</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Gender</div>
+          <div class="info-value" id="memberGender">-</div>
+        </div>
+      </div>
+
+      <!-- Checkup Table -->
+      <div class="overflow-x-auto">
+        <table class="checkup-table">
+          <thead>
+            <tr>
+              <th class="label-col"></th>
+              <th>Week 1</th>
+              <th>Week 2</th>
+              <th>Week 3</th>
+              <th>Week 4</th>
+              <th>Week 5</th>
+              <th>Week 6</th>
+              <th>Week 7</th>
+              <th>Week 8</th>
+              <th>Week 9</th>
+              <th>Week 10</th>
+              <th>Week 11</th>
+              <th>Week 12</th>
+              <th>Week 13</th>
+              <th>Week 14</th>
+              <th>Week 15</th>
+              <th>Week 16</th>
+            </tr>
+            <tr id="dateRow">
+              <td class="label-col">Date</td>
+              <!-- Dates will be populated here -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="label-col">Age</td>
+              <td><input type="text" class="checkup-input" data-week="1" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="2" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="3" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="4" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="5" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="6" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="7" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="8" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="9" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="10" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="11" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="12" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="13" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="14" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="15" data-field="age" /></td>
+              <td><input type="text" class="checkup-input" data-week="16" data-field="age" /></td>
+            </tr>
+            <tr>
+              <td class="label-col">Height</td>
+              <td><input type="text" class="checkup-input" data-week="1" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="2" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="3" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="4" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="5" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="6" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="7" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="8" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="9" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="10" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="11" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="12" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="13" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="14" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="15" data-field="height" /></td>
+              <td><input type="text" class="checkup-input" data-week="16" data-field="height" /></td>
+            </tr>
+            <tr>
+              <td class="label-col">Weight</td>
+              <td><input type="text" class="checkup-input" data-week="1" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="2" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="3" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="4" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="5" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="6" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="7" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="8" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="9" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="10" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="11" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="12" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="13" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="14" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="15" data-field="weight" /></td>
+              <td><input type="text" class="checkup-input" data-week="16" data-field="weight" /></td>
+            </tr>
+            <tr>
+              <td class="label-col">Body Fat</td>
+              <td><input type="text" class="checkup-input" data-week="1" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="2" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="3" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="4" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="5" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="6" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="7" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="8" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="9" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="10" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="11" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="12" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="13" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="14" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="15" data-field="body_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="16" data-field="body_fat" /></td>
+            </tr>
+            <tr>
+              <td class="label-col">BMA</td>
+              <td><input type="text" class="checkup-input" data-week="1" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="2" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="3" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="4" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="5" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="6" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="7" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="8" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="9" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="10" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="11" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="12" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="13" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="14" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="15" data-field="bma" /></td>
+              <td><input type="text" class="checkup-input" data-week="16" data-field="bma" /></td>
+            </tr>
+            <tr>
+              <td class="label-col">BMI</td>
+              <td><input type="text" class="checkup-input" data-week="1" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="2" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="3" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="4" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="5" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="6" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="7" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="8" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="9" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="10" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="11" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="12" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="13" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="14" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="15" data-field="bmi" /></td>
+              <td><input type="text" class="checkup-input" data-week="16" data-field="bmi" /></td>
+            </tr>
+            <tr>
+              <td class="label-col">BMR</td>
+              <td><input type="text" class="checkup-input" data-week="1" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="2" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="3" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="4" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="5" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="6" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="7" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="8" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="9" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="10" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="11" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="12" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="13" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="14" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="15" data-field="bmr" /></td>
+              <td><input type="text" class="checkup-input" data-week="16" data-field="bmr" /></td>
+            </tr>
+            <tr>
+              <td class="label-col">Visceral Fat</td>
+              <td><input type="text" class="checkup-input" data-week="1" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="2" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="3" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="4" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="5" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="6" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="7" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="8" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="9" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="10" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="11" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="12" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="13" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="14" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="15" data-field="visceral_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="16" data-field="visceral_fat" /></td>
+            </tr>
+            <tr>
+              <td class="label-col">Subcutaneous Fat</td>
+              <td><input type="text" class="checkup-input" data-week="1" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="2" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="3" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="4" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="5" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="6" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="7" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="8" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="9" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="10" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="11" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="12" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="13" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="14" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="15" data-field="subcutaneous_fat" /></td>
+              <td><input type="text" class="checkup-input" data-week="16" data-field="subcutaneous_fat" /></td>
+            </tr>
+            <tr>
+              <td class="label-col">Muscle Mass</td>
+              <td><input type="text" class="checkup-input" data-week="1" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="2" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="3" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="4" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="5" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="6" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="7" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="8" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="9" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="10" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="11" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="12" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="13" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="14" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="15" data-field="muscle_mass" /></td>
+              <td><input type="text" class="checkup-input" data-week="16" data-field="muscle_mass" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Save Button -->
+      <div class="mt-6 flex justify-end">
+        <button 
+          onclick="saveCheckupData()"
+          class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium"
+        >
+          Save Checkup Data
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+        // CSRF helper: read csrftoken from cookies and attach to POSTs
+        function getCookie(name) {
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+        const csrftoken = getCookie('csrftoken');
+    let selectedMember = null;
+    let activeWeek = null;
+    let lockedWeeks = new Set();
+
+    // Search for member
+    async function searchMember() {
+      const searchTerm = document.getElementById('searchInput').value.trim();
+      if (!searchTerm) {
+        alert('Please enter a name or phone number');
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/members/search/?q=${encodeURIComponent(searchTerm)}`);
+        const data = await response.json();
+
+        if (data.length === 0) {
+          alert('No members found');
+          return;
+        }
+
+        // Display search results
+        const resultsContainer = document.getElementById('resultsContainer');
+        resultsContainer.innerHTML = data.map(member => `
+          <div class="border border-gray-300 rounded-lg p-4 mb-2 cursor-pointer hover:bg-blue-50"
+               onclick="selectMember(${member.id})">
+            <div class="font-semibold">${member.full_name}</div>
+            <div class="text-sm text-gray-600">${member.phone || 'No phone'}</div>
+          </div>
+        `).join('');
+
+        document.getElementById('searchResults').classList.remove('hidden');
+
+        // If only one result, auto-select it
+        if (data.length === 1) {
+          selectMember(data[0].id);
+        }
+      } catch (error) {
+        console.error('Search error:', error);
+        alert('Error searching for member');
+      }
+    }
+
+    // Select a member and load their checkup data
+    async function selectMember(memberId) {
+      try {
+        const response = await fetch(`/api/body-checkup/${memberId}/`);
+        const data = await response.json();
+
+        selectedMember = data.member;
+
+        // Populate member info
+        document.getElementById('memberName').textContent = data.member.full_name || '-';
+        document.getElementById('memberPhone').textContent = data.member.phone || '-';
+        document.getElementById('memberDate').textContent = data.member.registration_date || '-';
+        document.getElementById('memberInvitedBy').textContent = data.member.invited_by || '-';
+        document.getElementById('memberGender').textContent = data.member.gender || '-';
+
+        // Populate dates in the table
+        const dateRow = document.getElementById('dateRow');
+        dateRow.innerHTML = '<td class="label-col">Date</td>';
+        for (let i = 1; i <= 16; i++) {
+          const weekData = data.weeks[i];
+          const dateCell = document.createElement('td');
+          const dateVal = weekData ? weekData.date : '';
+          // Week 1 always locked: show text only
+          if (i === 1 || (data.locked_weeks && data.locked_weeks.includes(i))) {
+            dateCell.textContent = dateVal || '-';
+          } else {
+            // For unlocked weeks, render a date picker input
+            const input = document.createElement('input');
+            input.type = 'date';
+            input.className = 'checkup-input';
+            input.dataset.week = String(i);
+            input.dataset.field = 'date';
+            if (dateVal) input.value = dateVal;
+            // When a date is selected, enable that week's inputs
+            input.addEventListener('change', (e) => {
+              const w = parseInt(e.target.dataset.week, 10);
+              if (e.target.value) {
+                activeWeek = w;
+                lockedWeeks.delete(w);
+                enableWeekInputs(w);
+              }
+            });
+            dateCell.appendChild(input);
+          }
+          dateRow.appendChild(dateCell);
+        }
+
+        // Populate checkup data
+        for (let week = 1; week <= 16; week++) {
+          const weekData = data.weeks[week];
+          if (weekData && weekData.data) {
+            Object.keys(weekData.data).forEach(field => {
+              const input = document.querySelector(`input[data-week="${week}"][data-field="${field}"]`);
+              if (input) {
+                input.value = weekData.data[field] || '';
+              }
+            });
+          }
+        }
+
+        // Initialize locking: Week 1 + all other weeks disabled by default, unless already locked by backend
+        lockedWeeks = new Set([1]);
+        (data.locked_weeks || []).forEach(w => lockedWeeks.add(w));
+        disableAllInputs();
+
+        // Show checkup section
+        document.getElementById('checkupSection').classList.remove('hidden');
+        document.getElementById('searchSection').classList.add('hidden');
+      } catch (error) {
+        console.error('Error loading member data:', error);
+        alert('Error loading member checkup data');
+      }
+    }
+
+    function disableAllInputs() {
+      for (let week = 1; week <= 16; week++) {
+        const inputs = document.querySelectorAll(`input[data-week="${week}"]`);
+        inputs.forEach(inp => {
+          // Keep date pickers enabled so the user can choose a date
+          if (inp.dataset.field === 'date') {
+            inp.disabled = false;
+          } else {
+            inp.disabled = true;
+          }
+        });
+      }
+    }
+
+    function enableWeekInputs(week) {
+      // Disable all except the selected week
+      for (let w = 1; w <= 16; w++) {
+        const inputs = document.querySelectorAll(`input[data-week="${w}"]`);
+        const isLocked = lockedWeeks.has(w) || w === 1;
+        inputs.forEach(inp => {
+          // Never enable Week 1
+          if (isLocked) {
+            inp.disabled = true;
+          } else {
+            inp.disabled = (w !== week);
+          }
+        });
+      }
+    }
+
+    // Remove header click activation; editing only after date chosen
+
+    // Save checkup data
+    async function saveCheckupData() {
+      if (!selectedMember) {
+        alert('No member selected');
+        return;
+      }
+
+      // Collect all checkup data
+      const checkupData = [];
+      for (let week = 1; week <= 16; week++) {
+        const weekData = { week, data: {} };
+
+        const fields = ['age', 'height', 'weight', 'body_fat', 'bma', 'bmi', 'bmr', 'visceral_fat', 'subcutaneous_fat', 'muscle_mass'];
+        fields.forEach(field => {
+          const input = document.querySelector(`input[data-week="${week}"][data-field="${field}"]`);
+          if (input && input.value.trim()) {
+            weekData.data[field] = input.value.trim();
+          }
+        });
+        // include date if provided via picker
+        const dateInput = document.querySelector(`input[data-week="${week}"][data-field="date"]`);
+        if (dateInput && dateInput.value) {
+          weekData.date = dateInput.value;
+        }
+
+        if (Object.keys(weekData.data).length > 0 || weekData.date) {
+          checkupData.push(weekData);
+        }
+      }
+
+      try {
+        const response = await fetch(`/api/body-checkup/${selectedMember.id}/save/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken || '',
+          },
+          body: JSON.stringify({ checkup_data: checkupData }),
+          credentials: 'same-origin'
+        });
+
+        if (response.ok) {
+          alert('Checkup data saved successfully!');
+          // lock the active week and disable all inputs again
+          if (activeWeek) {
+            lockedWeeks.add(activeWeek);
+            activeWeek = null;
+          }
+          disableAllInputs();
+        } else {
+          const error = await response.json();
+          alert('Error saving data: ' + (error.detail || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Save error:', error);
+        alert('Error saving checkup data');
+      }
+    }
+
+    // Allow search on Enter key
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        searchMember();
+      }
+    });
+  </script>
+</body>
+</html>

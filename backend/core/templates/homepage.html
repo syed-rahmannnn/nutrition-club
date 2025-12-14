@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Membership Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #ffffff;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      height: 80%;
+      background-image: url('/static/images/id3R36eTP4_1765110001953.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: contain;
+      opacity: 1;
+      z-index: 0;
+      pointer-events: none;
+      max-width: 1200px;
+      max-height: 800px;
+    }
+    nav, main, .fixed {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="flex justify-between items-center p-4 bg-gradient-to-r from-green-700 to-green-600 shadow-md">
+      <div class="text-white font-bold text-2xl">Membership Management</div>
+      <div class="flex items-center gap-4">
+        <span class="text-white" id="userName">Welcome</span>
+        <img src="/static/images/avatar.png" onerror="this.src='https://via.placeholder.com/40'" 
+             class="w-10 h-10 rounded-full cursor-pointer border-2 border-white shadow-lg" id="accountBtn" />
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex items-center justify-center py-16 px-4">
+      <div class="max-w-6xl w-full">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl shadow-xl p-6 border border-green-200 hover:shadow-2xl transition-all duration-300">
+            <div class="text-sm text-gray-700 font-medium">Total Members</div>
+            <div class="text-3xl font-bold text-green-700" id="totalMembers">0</div>
+          </div>
+          <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl shadow-xl p-6 border border-gray-200 hover:shadow-2xl transition-all duration-300">
+            <div class="text-sm text-gray-700 font-medium">Today's Attendance</div>
+            <div class="text-3xl font-bold text-gray-700" id="todayAttendance">0</div>
+          </div>
+          <div class="bg-gradient-to-br from-green-100 to-green-200 rounded-2xl shadow-xl p-6 border border-green-300 hover:shadow-2xl transition-all duration-300">
+            <div class="text-sm text-gray-700 font-medium">Outstanding Balance</div>
+            <div class="text-3xl font-bold text-green-800" id="totalBalance">₹0</div>
+          </div>
+        </div>
+
+        <!-- Feature Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <a href="/ums/" class="card p-8 rounded-2xl bg-gradient-to-br from-green-50 to-white border border-green-200 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
+            <div class="text-2xl font-semibold text-green-800 mb-2">📋 UMS Attendance</div>
+            <div class="text-sm text-gray-600">Manage daily attendance & payments</div>
+          </a>
+          
+          <a href="/body-checkup/" class="card p-8 rounded-2xl bg-gradient-to-br from-gray-50 to-white border border-gray-200 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
+            <div class="text-2xl font-semibold text-gray-800 mb-2">💪 Body Checkup</div>
+            <div class="text-sm text-gray-600">Weekly checkups and reports</div>
+          </a>
+          
+          <a href="/register/" class="card p-8 rounded-2xl bg-gradient-to-br from-green-100 to-white border border-green-300 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
+            <div class="text-2xl font-semibold text-green-800 mb-2">✍️ New Registration</div>
+            <div class="text-sm text-gray-600">Register new members</div>
+          </a>
+          
+          <a href="/member-details/" class="card p-8 rounded-2xl bg-gradient-to-br from-gray-100 to-white border border-gray-300 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
+            <div class="text-2xl font-semibold text-gray-800 mb-2">👥 Member Details</div>
+            <div class="text-sm text-gray-600">Search & edit members</div>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Quick Actions Button -->
+    <div class="fixed right-6 bottom-6 flex flex-col gap-3">
+      <button onclick="window.location.href='/ums/'" 
+              class="bg-green-600 hover:bg-green-700 text-white rounded-full w-14 h-14 shadow-xl flex items-center justify-center text-2xl transition-all">
+        ✓
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Fetch dashboard statistics
+    async function loadStats() {
+      try {
+        const response = await fetch('/api/dashboard/stats/');
+        const data = await response.json();
+        
+        document.getElementById('totalMembers').textContent = data.total_members || 0;
+        document.getElementById('todayAttendance').textContent = data.today_attendance || 0;
+        document.getElementById('totalBalance').textContent = '₹' + (data.total_outstanding_balance || 0).toFixed(2);
+      } catch (error) {
+        console.error('Failed to load stats:', error);
+      }
+    }
+
+    // Load stats on page load
+    loadStats();
+
+    // Account button action
+    document.getElementById('accountBtn').addEventListener('click', function() {
+      if(confirm('Go to admin panel?')) {
+        window.location.href = '/admin/';
+      }
+    });
+  </script>
+</body>
+</html>

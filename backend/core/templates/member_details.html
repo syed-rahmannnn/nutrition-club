@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="p-6 max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold text-gray-800">Member Details</h1>
+      <a href="/" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Back</a>
+    </div>
+    
+    <div class="bg-white shadow-lg rounded-lg p-6">
+      <div id="searchSection" class="mb-6">
+        <h2 class="text-xl font-semibold mb-3">Search Member</h2>
+        <div class="flex gap-3">
+          <input 
+            type="text" 
+            id="memberSearch" 
+            placeholder="Enter Member ID or Phone Number" 
+            class="flex-1 border rounded p-2"
+          />
+          <button 
+            onclick="searchMember()" 
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+      
+      <div id="memberInfo" class="hidden">
+        <!-- Member basic info -->
+        <div class="border-b pb-4 mb-4">
+          <h2 class="text-2xl font-bold mb-3" id="memberName"></h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div>
+              <span class="font-semibold">Member Code:</span>
+              <span id="memberCode"></span>
+            </div>
+            <div>
+              <span class="font-semibold">Phone:</span>
+              <span id="memberPhone"></span>
+            </div>
+            <div>
+              <span class="font-semibold">Gender:</span>
+              <span id="memberGender"></span>
+            </div>
+            <div>
+              <span class="font-semibold">Age:</span>
+              <span id="memberAge"></span>
+            </div>
+            <div>
+              <span class="font-semibold">Membership:</span>
+              <span id="memberMembership"></span>
+            </div>
+            <div>
+              <span class="font-semibold">Balance:</span>
+              <span id="memberBalance"></span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Registration info and download button -->
+        <div id="registrationSection" class="bg-blue-50 p-4 rounded mb-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-lg font-semibold mb-2">Registration Information</h3>
+              <p class="text-sm text-gray-600">
+                Registration Date: <span id="regDate"></span>
+              </p>
+              <p class="text-sm text-gray-600">
+                Invited By: <span id="invitedBy"></span>
+              </p>
+            </div>
+            <div>
+              <button 
+                id="downloadAnalysisBtn"
+                onclick="downloadAnalysisReport()"
+                class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg"
+              >
+                📄 Download Analysis Report (PDF)
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Body Evaluation Info -->
+        <div id="bodyEvalSection" class="bg-gray-50 p-4 rounded">
+          <h3 class="text-lg font-semibold mb-3">Latest Body Evaluation</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+            <div>
+              <span class="font-semibold">Height:</span>
+              <span id="bodyHeight"></span> cm
+            </div>
+            <div>
+              <span class="font-semibold">Weight:</span>
+              <span id="bodyWeight"></span> kg
+            </div>
+            <div>
+              <span class="font-semibold">BMI:</span>
+              <span id="bodyBMI"></span>
+            </div>
+            <div>
+              <span class="font-semibold">Visceral Fat:</span>
+              <span id="bodyVisceral"></span>
+            </div>
+            <div>
+              <span class="font-semibold">Body Age:</span>
+              <span id="bodyAge"></span>
+            </div>
+            <div>
+              <span class="font-semibold">Fat:</span>
+              <span id="bodyFat"></span>
+            </div>
+            <div>
+              <span class="font-semibold">Fluids:</span>
+              <span id="bodyFluids"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="noResults" class="hidden text-gray-600 text-center py-4">
+        No member found with that ID or phone number.
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let currentMemberId = null;
+    let currentRegistrationId = null;
+    
+    async function searchMember() {
+      const searchValue = document.getElementById('memberSearch').value.trim();
+      
+      if (!searchValue) {
+        alert('Please enter a Member ID or Phone Number');
+        return;
+      }
+      
+      try {
+        // Search for member by phone or member_code
+        const response = await fetch(`/api/members/?search=${encodeURIComponent(searchValue)}`, {
+          headers: {
+            'Authorization': 'Token ' + localStorage.getItem('authToken') // Adjust based on your auth
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch member');
+        }
+        
+        const data = await response.json();
+        
+        if (data.length === 0) {
+          document.getElementById('memberInfo').classList.add('hidden');
+          document.getElementById('noResults').classList.remove('hidden');
+          return;
+        }
+        
+        // Get full member details
+        const member = data[0];
+        currentMemberId = member.id;
+        
+        const detailResponse = await fetch(`/api/members/${member.id}/`, {
+          headers: {
+            'Authorization': 'Token ' + localStorage.getItem('authToken')
+          }
+        });
+        
+        const memberDetail = await detailResponse.json();
+        displayMemberDetails(memberDetail);
+        
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error searching for member: ' + error.message);
+      }
+    }
+    
+    function displayMemberDetails(member) {
+      document.getElementById('noResults').classList.add('hidden');
+      document.getElementById('memberInfo').classList.remove('hidden');
+      
+      // Basic info
+      document.getElementById('memberName').textContent = member.full_name;
+      document.getElementById('memberCode').textContent = member.member_code;
+      document.getElementById('memberPhone').textContent = member.phone || 'N/A';
+      document.getElementById('memberGender').textContent = member.gender || 'N/A';
+      document.getElementById('memberMembership').textContent = member.membership || 'N/A';
+      document.getElementById('memberBalance').textContent = '₹' + (member.balance || 0);
+      
+      // Registration info
+      if (member.registration) {
+        currentRegistrationId = member.registration.id;
+        document.getElementById('memberAge').textContent = member.registration.age || 'N/A';
+        document.getElementById('regDate').textContent = formatDate(member.registration.created_at);
+        document.getElementById('invitedBy').textContent = member.registration.invited_by || 'N/A';
+        document.getElementById('registrationSection').classList.remove('hidden');
+      } else {
+        document.getElementById('memberAge').textContent = 'N/A';
+        document.getElementById('registrationSection').classList.add('hidden');
+      }
+      
+      // Body evaluation info
+      if (member.body_evaluations && member.body_evaluations.length > 0) {
+        const bodyEval = member.body_evaluations[0];
+        document.getElementById('bodyHeight').textContent = bodyEval.height_cm || 'N/A';
+        document.getElementById('bodyWeight').textContent = bodyEval.weight_kg || 'N/A';
+        document.getElementById('bodyBMI').textContent = bodyEval.bmi || 'N/A';
+        document.getElementById('bodyVisceral').textContent = bodyEval.visceral_fat || 'N/A';
+        document.getElementById('bodyAge').textContent = bodyEval.body_age || 'N/A';
+        document.getElementById('bodyFat').textContent = bodyEval.fat || 'N/A';
+        document.getElementById('bodyFluids').textContent = bodyEval.fluids || 'N/A';
+        document.getElementById('bodyEvalSection').classList.remove('hidden');
+      } else {
+        document.getElementById('bodyEvalSection').classList.add('hidden');
+      }
+    }
+    
+    function downloadAnalysisReport() {
+      if (!currentRegistrationId) {
+        alert('No registration found for this member');
+        return;
+      }
+      
+      // Open PDF in new window
+      const url = `/api/reports/registration/${currentRegistrationId}/analysis/`;
+      window.open(url, '_blank');
+    }
+    
+    function formatDate(dateString) {
+      if (!dateString) return 'N/A';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-GB');
+    }
+    
+    // Load member from URL parameter if provided
+    window.addEventListener('load', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const memberId = urlParams.get('member_id');
+      
+      if (memberId) {
+        document.getElementById('memberSearch').value = memberId;
+        searchMember();
+      }
+    });
+  </script>
+</body>
+</html>

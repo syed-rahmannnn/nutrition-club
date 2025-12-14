@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UMS Attendance</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="p-6 max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-800">UMS Attendance</h1>
+        <div class="flex items-center gap-4 mt-2">
+          <div id="todayDate" class="text-sm text-gray-600"></div>
+          <input type="date" id="dateSelector" class="border rounded p-2 text-sm" />
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <input id="search" placeholder="Search name or phone" 
+               class="border rounded-lg px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <a href="/" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Back</a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <!-- Members Table -->
+      <div class="lg:col-span-3">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="min-w-full">
+              <thead class="bg-gray-100 border-b">
+                <tr>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Name</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Phone</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Membership</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Balance</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Paid Today</th>
+                  <th class="px-4 py-3 text-center text-xs font-semibold text-gray-700 uppercase">Present</th>
+                </tr>
+              </thead>
+              <tbody id="membersTable" class="divide-y divide-gray-200">
+                <!-- Rows populated by JS -->
+                <tr>
+                  <td colspan="6" class="px-4 py-8 text-center text-gray-500">
+                    Loading members...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pending Sidebar -->
+      <div class="lg:col-span-1">
+        <div class="bg-white p-6 shadow-lg rounded-lg sticky top-6">
+          <h2 class="font-semibold text-lg mb-4 text-gray-800">Pending Submission</h2>
+          <ul id="pendingList" class="space-y-2 mb-6 max-h-96 overflow-y-auto">
+            <li class="text-sm text-gray-500">No pending entries</li>
+          </ul>
+          
+          <div class="border-t pt-4 space-y-2">
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-600">Total Selected:</span>
+              <span id="totalPending" class="font-semibold">0</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-600">Total Amount:</span>
+              <span id="totalAmount" class="font-semibold text-green-600">₹0.00</span>
+            </div>
+            <button id="submitAttendance" 
+                    class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Submit Attendance
+            </button>
+            <button id="generatePDF" 
+                    class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+              Generate PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/ums.js"></script>
+</body>
+</html>

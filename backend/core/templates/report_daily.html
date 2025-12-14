@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Attendance Report - {{ date }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            color: #667eea;
+            font-size: 28px;
+        }
+        .header p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .summary {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .summary-item {
+            display: inline-block;
+            margin-right: 30px;
+            font-size: 16px;
+        }
+        .summary-item strong {
+            color: #667eea;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        thead {
+            background-color: #667eea;
+            color: white;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        tbody tr:hover {
+            background-color: #e9ecef;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        .amount {
+            text-align: right;
+            font-weight: bold;
+        }
+        .total-row {
+            background-color: #667eea !important;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ org_name }}</h1>
+        <p>Daily Attendance Report</p>
+        <p><strong>Date:</strong> {{ date }}</p>
+    </div>
+
+    <div class="summary">
+        <div class="summary-item">
+            <strong>Total Present:</strong> {{ total_present }}
+        </div>
+        <div class="summary-item">
+            <strong>Total Received:</strong> ₹{{ total_received }}
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Member Code</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>UMS Count</th>
+                <th class="amount">Payment Received</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for attendance in attendances %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ attendance.member.member_code }}</td>
+                <td>{{ attendance.member.full_name }}</td>
+                <td>{{ attendance.member.phone }}</td>
+                <td>{{ attendance.member.ums_count }}</td>
+                <td class="amount">₹{{ attendance.paid_amount }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="total-row">
+                <td colspan="5" style="text-align: right;">TOTAL</td>
+                <td class="amount">₹{{ total_received }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <p>Generated on {% now "Y-m-d H:i" %} | {{ org_name }}</p>
+        <p>This is a computer-generated report and does not require a signature.</p>
+    </div>
+</body>
+</html>
